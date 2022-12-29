@@ -30,7 +30,7 @@ default_half_pitch = false;
 default_lip_style = "normal";
 // Limit attachments (magnets and scres) to box corners for faster printing.
 box_corner_attachments_only = false;
-basic_cup(
+/*basic_cup(
   num_x=2,
   num_y=1,
   num_z=2,
@@ -47,8 +47,9 @@ basic_cup(
   lip_style=default_lip_style,
   box_corner_attachments_only=box_corner_attachments_only,
   spacer=default_spacer
-);
+);*/
 
+basic_cavity(num_x=2, num_y=1, num_z=3);
 
 // It's recommended that all parameters other than x, y, z size should be specified by keyword 
 // and not by position.  The number of parameters makes positional parameters error prone, and
@@ -181,7 +182,6 @@ module partitioned_cavity(num_x, num_y, num_z, withLabel=default_withLabel,
   }
 }
 
-
 module basic_cavity(num_x, num_y, num_z, fingerslide=default_fingerslide, 
     magnet_diameter=default_magnet_diameter, screw_depth=default_screw_depth, 
     floor_thickness=default_floor_thickness, wall_thickness=default_wall_thickness,
@@ -206,7 +206,7 @@ module basic_cavity(num_x, num_y, num_z, fingerslide=default_fingerslide,
     union() {
       // cut downward from base
       hull() cornercopy(seventeen, num_x, num_y) {
-        tz(zpoint-eps) cylinder(d=2.3, h=1.2+2*eps, $fn=24); // lip
+        //tz(zpoint-eps) cylinder(d=2.3, h=1.2+2*eps, $fn=24); // lip
       }
       
       hull() cornercopy(seventeen, num_x, num_y) {
@@ -222,7 +222,11 @@ module basic_cavity(num_x, num_y, num_z, fingerslide=default_fingerslide,
         }
         tz(zpoint-q-q2) cylinder(d=2.3+2*q, h=q2, $fn=32);   // ... to top of thin wall ...
         // create rounded bottom of bowl (8.5 is high enough to not expose gaps)
-        tz(2.3/2+q+floorht) sphere(d=2.3+2*q, $fn=32);       // .. to bottom of thin wall and floor
+        tz(2.3/2+q+floorht) difference() {       // .. to bottom of thin wall and floor
+          d = 2.3+2*q;
+          sphere(d=d, $fn=32);
+          tz(d/2) cube(d, true);
+        };
         tz(2.3/2+q+floorht) mirror([0, 0, 1]) cylinder(d1=2.3+2*q, d2=0, h=1.15+q, $fn=32);
       }
     }
