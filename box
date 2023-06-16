@@ -8,7 +8,7 @@ H=4
 C=1
 LABEL=center
 SLIDE=true
-HALF_PITCH=true
+HALF_PITCH=false
 EFFICIENT=false
 SPACER=false
 
@@ -46,6 +46,10 @@ while [[ $# -gt 0 ]]; do
       C=${1:2}
       shift
       ;;
+    --half-pitch)
+      HALF_PITCH=true
+      shift
+      ;;
     --no-label)
       LABEL=disabled
       shift
@@ -56,7 +60,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     --efficient)
       SLIDE=false
-      HALF_PITCH=false
       EFFICIENT=true
       shift
       ;;
